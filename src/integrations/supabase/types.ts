@@ -14,7 +14,192 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ecosystems: {
+        Row: {
+          color: string
+          lat: number
+          lng: number
+          name: string
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          color: string
+          lat: number
+          lng: number
+          name: string
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          color?: string
+          lat?: number
+          lng?: number
+          name?: string
+          slug?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follows_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follows_following_id_fkey"
+            columns: ["following_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          ecosystem_slug: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          ecosystem_slug: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          ecosystem_slug?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_ecosystem_slug_fkey"
+            columns: ["ecosystem_slug"]
+            isOneToOne: false
+            referencedRelation: "ecosystems"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "messages_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          chain: string
+          created_at: string
+          display_name: string | null
+          id: string
+          lat: number
+          lng: number
+          location_shared: boolean
+          updated_at: string
+          username: string | null
+          wallet_address: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          chain: string
+          created_at?: string
+          display_name?: string | null
+          id: string
+          lat: number
+          lng: number
+          location_shared?: boolean
+          updated_at?: string
+          username?: string | null
+          wallet_address: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          chain?: string
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          lat?: number
+          lng?: number
+          location_shared?: boolean
+          updated_at?: string
+          username?: string | null
+          wallet_address?: string
+        }
+        Relationships: []
+      }
+      wallet_identities: {
+        Row: {
+          address: string
+          chain: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          address: string
+          chain: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          chain?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallet_nonces: {
+        Row: {
+          address: string
+          chain: string
+          expires_at: string
+          nonce: string
+        }
+        Insert: {
+          address: string
+          chain: string
+          expires_at: string
+          nonce: string
+        }
+        Update: {
+          address?: string
+          chain?: string
+          expires_at?: string
+          nonce?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
