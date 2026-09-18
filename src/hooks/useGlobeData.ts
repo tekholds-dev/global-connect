@@ -38,7 +38,7 @@ export function usePresence(userId: string | undefined) {
       const state = channel.presenceState<{ user_id?: string }>();
       const ids = new Set<string>();
       for (const key of Object.keys(state)) {
-        for (const p of state[key]) if (p.user_id) ids.add(p.user_id);
+        for (const p of state[key] ?? []) if (p.user_id) ids.add(p.user_id);
       }
       setOnline(ids);
     };

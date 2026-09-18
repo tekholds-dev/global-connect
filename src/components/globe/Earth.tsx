@@ -100,13 +100,15 @@ export function Earth() {
 
   useMemo(() => {
     for (const t of [spec, lights]) {
+      if (!t) continue;
       t.colorSpace = THREE.NoColorSpace;
       t.anisotropy = 8;
     }
   }, [spec, lights]);
 
   useFrame((state) => {
-    if (matRef.current) matRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+    const u = matRef.current?.uniforms['uTime'];
+    if (u) u.value = state.clock.elapsedTime;
   });
 
   return (

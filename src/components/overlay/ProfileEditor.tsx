@@ -21,24 +21,33 @@ export function ProfileEditor({ profile }: { profile: Profile }) {
   const [saving, setSaving] = useState(false);
   const [locBusy, setLocBusy] = useState(false);
 
-  const save = async () => {
+  const save = async (): Promise<void> => {
     const u = username.trim().toLowerCase();
-    if (!/^[a-z0-9_]{3,20}$/.test(u)) return toast.error("Username: 3–20 letters, numbers or _");
+    if (!/^[a-z0-9_]{3,20}$/.test(u)) {
+      toast.error("Username: 3–20 letters, numbers or _");
+      return;
+    }
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
       .update({ username: u, display_name: displayName.trim() || null, bio: bio.trim() || null })
       .eq("id", profile.id);
     setSaving(false);
-    if (error) return toast.error(/unique|duplicate/i.test(error.message) ? "That username is taken" : error.message);
+    if (error) {
+      toast.error(/unique|duplicate/i.test(error.message) ? "That username is taken" : error.message);
+      return;
+    }
     await refreshProfile();
     void qc.invalidateQueries({ queryKey: ["profiles"] });
     toast.success("Profile saved");
     setPanel("none");
   };
 
-  const shareLocation = async () => {
-    if (!navigator.geolocation) return toast.error("Location not available on this device");
+  const shareLocation = async (): Promise<void> => {
+    if (!navigator.geolocation) {
+      toast.error("Location not available on this device");
+      return;
+    }
     setLocBusy(true);
     navigator.geolocation.getCurrentPosition(
       async (pos) => {

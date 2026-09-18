@@ -44,6 +44,8 @@ export function UserDots({ profiles }: { profiles: Profile[] }) {
     const t = clock.elapsedTime;
     for (let i = 0; i < count; i++) {
       const p = profiles[i];
+      const pos = positions[i];
+      if (!p || !pos) continue;
       const isOnline = onlineIds.has(p.id);
       const isSel = p.id === selectedUserId;
       tmpColor.copy(isSel ? SELECTED : isOnline ? ONLINE : BASE);
@@ -51,7 +53,7 @@ export function UserDots({ profiles }: { profiles: Profile[] }) {
       core.setColorAt(i, tmpColor);
       halo.setColorAt(i, tmpColor);
       const s = isSel ? 2.2 : isOnline ? 1.5 : 1;
-      tmp.position.copy(positions[i]);
+      tmp.position.copy(pos);
       tmp.scale.setScalar(s);
       tmp.updateMatrix();
       halo.setMatrixAt(i, tmp.matrix);
@@ -68,6 +70,7 @@ export function UserDots({ profiles }: { profiles: Profile[] }) {
     const i = e.instanceId;
     if (i == null) return;
     const p = profiles[i];
+    if (!p) return;
     selectUser(p.id, { lat: p.lat, lng: p.lng });
   };
 
