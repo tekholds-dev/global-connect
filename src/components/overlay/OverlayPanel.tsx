@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 
 /**
  * Minimal glass panel. Desktop: floats on the right. Mobile: bottom sheet.
+ * `flush` hands scrolling + spacing to the children (used by the tabbed ecosystem panel).
  */
 export function OverlayPanel({
   title,
@@ -12,6 +13,8 @@ export function OverlayPanel({
   children,
   size = "md",
   footer,
+  tabs,
+  flush = false,
 }: {
   title: ReactNode;
   subtitle?: ReactNode;
@@ -20,11 +23,13 @@ export function OverlayPanel({
   children: ReactNode;
   size?: "sm" | "md";
   footer?: ReactNode;
+  tabs?: ReactNode;
+  flush?: boolean;
 }) {
   const width = size === "sm" ? "md:w-[340px]" : "md:w-[380px]";
   return (
     <div
-      className={`glass pointer-events-auto fixed inset-x-2 bottom-2 z-30 flex max-h-[70dvh] flex-col overflow-hidden rounded-2xl animate-slide-in-up md:inset-x-auto md:bottom-4 md:right-4 md:top-4 md:max-h-none md:animate-slide-in-right ${width}`}
+      className={`glass pointer-events-auto fixed inset-x-2 bottom-2 z-30 flex max-h-[78dvh] flex-col overflow-hidden rounded-2xl animate-slide-in-up md:inset-x-auto md:bottom-4 md:right-4 md:top-4 md:max-h-none md:animate-slide-in-right ${width}`}
       role="dialog"
     >
       <header className="flex items-start gap-3 border-b border-border px-4 py-3">
@@ -42,7 +47,8 @@ export function OverlayPanel({
           <X className="h-4 w-4" />
         </button>
       </header>
-      <div className="scrollbar-thin min-h-0 flex-1 overflow-y-auto px-4 py-4">{children}</div>
+      {tabs && <div className="border-b border-border px-2 py-2">{tabs}</div>}
+      <div className={flush ? "flex min-h-0 flex-1 flex-col overflow-hidden" : "scrollbar-thin min-h-0 flex-1 overflow-y-auto px-4 py-4"}>{children}</div>
       {footer && <div className="border-t border-border px-3 py-3">{footer}</div>}
     </div>
   );
